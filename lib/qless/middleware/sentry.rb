@@ -11,6 +11,7 @@ module Qless
         super
       rescue Exception => e
         SentryLogger.new(e, job).log
+        ::Raven::Context.clear!
         raise
       end
 
