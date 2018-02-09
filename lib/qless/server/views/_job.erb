@@ -116,26 +116,33 @@
 	        <h3><small>History</small></h3>
 	        <div style="overflow-y:scroll; height: 200px">
 	          <% job.queue_history.reverse.each do |h| %>
-<pre>
-<% if h['what'] == 'put' %>
-<strong><%= h['what'] %></strong> at <%= strftime(h['when']) %> in queue <strong><%= h['q'] %></strong>
-<% elsif h['what'] == 'popped' %>
-<strong><%= h['what'] %></strong> at <%= strftime(h['when']) %> by <strong><%= h['worker'] %></strong>
-<% elsif h['what'] == 'done' %>
-<strong>completed</strong> at <%= strftime(h['when']) %>
-<% elsif h['what'] == 'failed' %>
-<% if h['worker'] %>
-<strong><%= h['what'] %></strong> at <%= strftime(h['when']) %> by <strong><%= h['worker'] %></strong> in group <strong><%= h['group'] %></strong>
-<% else %>
-<strong><%= h['what'] %></strong> at <%= strftime(h['when']) %> in group <strong><%= h['group'] %></strong>
-<% end %>
-<% else %>
-<strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
-<% end %>
-<% extra = h.except('what', 'when', 'q', 'worker', 'group') %>
-<%= JSON.pretty_generate(extra) unless extra.empty? %>
-</pre>
+            <% extra = h.except('what', 'when', 'q', 'worker', 'group') %>
+            <div class="<%= extra.present? ? "extra" : "" %>">
+	          <% if h['what'] == 'put' %>
+	          	<pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
+    in queue <strong><%= h['q'] %></strong></pre>
+	          <% elsif h['what'] == 'popped' %>
+	          	<pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
+    by <strong><%= h['worker'] %></strong></pre>
+	          <% elsif h['what'] == 'done' %>
+	          	<pre><strong>completed</strong> at <%= strftime(h['when']) %></pre>
+	          <% elsif h['what'] == 'failed' %>
+	          	<% if h['worker'] %>
+	          	  <pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
+    by <strong><%= h['worker'] %></strong>
+    in group <strong><%= h['group'] %></strong></pre>
+	          	<% else %>
+	          	  <pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
+    in group <strong><%= h['group'] %></strong></pre>
+	          	<% end %>
+	          <% else %>
+	          	<pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %></pre>
+	          <% end %>
+            <% unless extra.empty? %>
+              <pre class="extra"><%= JSON.pretty_generate(extra) %></pre>
             <% end %>
+            </div>
+	          <% end %>
 	        </div>
 	      </div>
 	    </div>
