@@ -116,6 +116,8 @@
 	        <h3><small>History</small></h3>
 	        <div style="overflow-y:scroll; height: 200px">
 	          <% job.queue_history.reverse.each do |h| %>
+	          <% extra = h.except('what', 'when', 'q', 'worker', 'group') %>
+	          <div class="<%= extra.present? ? "extra" : "" %>">
 	          <% if h['what'] == 'put' %>
 	          	<pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %>
     in queue <strong><%= h['q'] %></strong></pre>
@@ -136,6 +138,10 @@
 	          <% else %>
 	          	<pre><strong><%= h['what'] %></strong> at <%= strftime(h['when']) %></pre>
 	          <% end %>
+	          <% unless extra.empty? %>
+	            <pre class="extra"><%= JSON.pretty_generate(extra) %></pre>
+	          <% end %>
+	          </div>
 	          <% end %>
 	        </div>
 	      </div>
