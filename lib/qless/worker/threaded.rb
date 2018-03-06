@@ -14,7 +14,7 @@ module Qless
       def initialize(reserver, options = {})
         super(reserver, options)
 
-        @thread_count = options[:thread_count] || 5
+        @thread_count = options[:threads] || 5
 
         remove_instance_variable(:@current_job_mutex)
         remove_instance_variable(:@current_job)
