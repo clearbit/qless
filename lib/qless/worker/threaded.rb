@@ -4,6 +4,8 @@
 require 'qless'
 require 'qless/worker/base'
 
+# Note that this uses a single redis connection rather than a pool which may
+# cause contention depending on your workload.
 
 module Qless
   module Workers
@@ -28,6 +30,7 @@ module Qless
         procline "Running #{reserver.description} with #{@thread_count} threads"
 
         threads = []
+
         @thread_count.times do
           threads << Thread.new do
             listen_for_lost_lock do
@@ -46,6 +49,7 @@ module Qless
             end
           end
         end
+
         threads.each(&:join)
       end
 
