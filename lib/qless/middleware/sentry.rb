@@ -23,7 +23,7 @@ module Qless
 
         def log
           event = ::Raven::Event.capture_exception(@exception) do |evt|
-            evt.extra = { job: job_metadata }
+            evt.extra[:job] = job_metadata
           end
 
           safely_send event
