@@ -26,6 +26,7 @@ module Qless
 
     helpers do
       include Rack::Utils
+      include ERB::Util
 
       def url_path(*path_parts)
         [path_prefix, path_parts].join('/').squeeze('/')
